@@ -4,7 +4,7 @@ if (isset($_POST['employee'])) {
 
 	include 'conn.php';
 	include 'timezone.php';
-	
+   
 
 	$employee = $_POST['employee'];
 	$status = $_POST['status'];
@@ -29,7 +29,11 @@ if (isset($_POST['employee'])) {
 			// $query2 = $conn->query($sql);
 			// $entrada2 = $query2->num_rows;
 			if ($entrada1 == 1) {
-				$output['message'] = 'Has registrado tu entradas hoy';
+				echo'<script type="text/javascript">
+                alert("Has registrado tus entradas N-1 
+                Entrada N-2 Registrada Con Exito");
+                window.location.href="index.php";
+                </script>';
 			} else if ($entrada1 == 0) {
 				$sched = $row['schedule_id'];
 				$lognow = date('H:i:s');
@@ -44,14 +48,18 @@ if (isset($_POST['employee'])) {
 				//
 				$sql = "INSERT INTO attendance (employee_id, date, dia, time_in, status, entradas) VALUES ('$id', '$date_now', '$dia', '$time', '$logstatus', $entrada)";
 				if ($conn->query($sql)) {
-					$output['message'] = 'Llegada 1: ' . $row['firstname'] . ' ' . $row['lastname'];
+					$nombre = $row['firstname'] . ' ' . $row['lastname'];    
+                    echo '<script type="text/javascript">
+                    alert("Llegada N-1 de '.$nombre.' ");
+                    window.location.href="index.php"
+                    </script>';
 				} else {
-					$output['error'] = true;
-					$output['message'] = $conn->error;
+					echo true;
+					echo "error 59";
 				}
 			}
 			// if ($entrada2 == 1) {
-			// 	$output['message'] = 'Has registrado tu entrada N2 hoy';
+			// 	echo 'Has registrado tu entrada N2 hoy';
 			// }
 			$sql = "SELECT * FROM attendance WHERE employee_id =  '$id' AND date = '$date_now' AND EXISTS(SELECT * FROM attendance WHERE entradas=1)  AND time_in IS NOT NULL";
 			$query = $conn->query($sql);
@@ -60,7 +68,7 @@ if (isset($_POST['employee'])) {
 
 			if ($entrada2 == 1 && $attrow['time_out'] == '00:00:00') {
 
-				// $output['message'] = 'Debes registrar la salida de entrada N1';
+				// echo 'Debes registrar la salida de entrada N1';
 
 			} else if ($entrada2 == 1 && $attrow['time_out'] != '00:00:00') {
 				$sched = $row['schedule_id'];
@@ -76,10 +84,14 @@ if (isset($_POST['employee'])) {
 
 				$sql = "INSERT INTO attendance (employee_id, date, dia, time_in, status, entradas) VALUES ('$id', '$date_now', '$dia', '$time', '$logstatus', $entrada)";
 				if ($conn->query($sql)) {
-					$output['message'] = 'Llegada 2: ' . $row['firstname'] . ' ' . $row['lastname'];
+					$nombre = $row['firstname'] . ' ' . $row['lastname'];   
+                 echo '<script type="text/javascript">
+                    alert("Llegada N-2 de '.$nombre.' ");
+                    window.location.href="index.php"
+                    </script>';
 				} else {
-					$output['error'] = true;
-					$output['message'] = $conn->error;
+					echo true;
+					echo "error 95";
 				}
 			}
 		} else if ($status == 'out') {
@@ -90,10 +102,13 @@ if (isset($_POST['employee'])) {
 
 			if ($salida1 == 1 && $row['time_out'] == '00:00:00') {
 				$sql = "UPDATE attendance SET time_out = '$time', salidas = 1 WHERE id = '" . $row['uid'] . "'  AND  entradas= 1";
-				($sql) ? $output['message'] = 'salida 1: ' . $row['firstname'] . ' ' . $row['lastname'] : false;
-
+				 $nombre = $row['firstname'] . ' ' . $row['lastname'];   
+                 echo '<script type="text/javascript">
+                    alert("Salida N-1 de '.$nombre.' ");
+                    window.location.href="index.php"
+                    </script>';
 				if ($conn->query($sql)) {
-
+					
 					$sql = "SELECT * FROM attendance WHERE id = '" . $row['uid'] . "'";
 					$query = $conn->query($sql);
 					$urow = $query->fetch_assoc();
@@ -328,7 +343,7 @@ if (isset($_POST['employee'])) {
 					// print_r($resumen);
 					$total = array_sum($resumen);
 					// echo "total : ", $total;
-
+					
 					$horas = [
 						'diurnas' => $respuesta,
 						'nocturnas' => $nocturnas,
@@ -336,20 +351,18 @@ if (isset($_POST['employee'])) {
 					echo "<pre>";
 					echo "total horas ", $total_horas = array_sum($horas);
 
-
-
-					$sql = "UPDATE attendance SET num_hr = $total_horas , salario_base= '" . $resumen['salario_basico'] . "' , festivo= '" . $resumen['festivo'] . "' , recargo_noc = '" . $resumen['Rec_Nocturno'] . "' ,  ";
+					$sql = "UPDATE attendance SET num_hr = $total_horas, salario_base= '" . $resumen['salario_basico'] . "' , festivo= '" . $resumen['festivo'] . "' , recargo_noc = '" . $resumen['Rec_Nocturno'] . "' ,  ";
 					$sql .= " aux_tran = '" . $resumen['Aux_de_Trans'] . "' , hora_ext_diu = '" . $resumen['H_E_N_Diur'] . "'   , ";
 					$sql .= " hora_ext_noc = '" . $resumen['H_E_N_Noc'] . "' , hora_ext_dom_diu = '" . $resumen['H_E_F_Diur'] . "'   , hora_ext_dom_noc = '" . $resumen['H_E_F_Noc'] . "' , total='$total'  WHERE id = '" . $row['uid'] . "'";
 					$conn->query($sql);
-					// $output['message'] = 'Salida: ' . $row['firstname'] . ' ' . $row['lastname'];
+					// echo 'Salida: ' . $row['firstname'] . ' ' . $row['lastname'];
 				} else {
-					$output['error'] = true;
-					$output['message'] = $conn->error;
+					echo true;
+					echo $conn->error;
 				}
 			} else if ($query->num_rows < 1) {
-				$output['error'] = true;
-				$output['message'] = $salida1;
+				echo true;
+				echo "error 366";
 			}
 
 			$sql = "SELECT *, attendance.id AS uid  FROM attendance LEFT JOIN employees ON employees.id=attendance.employee_id WHERE attendance.employee_id = '$id' AND  entradas=2 AND date = '$date_now'";
@@ -360,7 +373,7 @@ if (isset($_POST['employee'])) {
 			if ($salida2 == 1 && $row['time_out'] == '00:00:00') {
 				$sql = "UPDATE attendance SET time_out = '$time', salidas = 2 WHERE id = '" . $row['uid'] . "'  AND  entradas= 2";
 				if ($conn->query($sql)) {
-					// $output['message'] = 'Salida2: ' . $row['firstname'] . ' ' . $row['lastname'];
+					// echo 'Salida2: ' . $row['firstname'] . ' ' . $row['lastname'];
 
 					$sql = "SELECT * FROM attendance WHERE id = '" . $row['uid'] . "'";
 					$query = $conn->query($sql);
@@ -595,7 +608,7 @@ if (isset($_POST['employee'])) {
 					// print_r($resumen);
 					$total = array_sum($resumen);
 					// echo "total : ", $total;
-
+					
 					$horas = [
 						'diurnas' => $respuesta,
 						'nocturnas' => $nocturnas,
@@ -607,16 +620,23 @@ if (isset($_POST['employee'])) {
 					$sql .= " aux_tran = '0' , hora_ext_diu = '" . $resumen['H_E_N_Diur'] . "'   , ";
 					$sql .= " hora_ext_noc = '" . $resumen['H_E_N_Noc'] . "' , hora_ext_dom_diu = '" . $resumen['H_E_F_Diur'] . "'   , hora_ext_dom_noc = '" . $resumen['H_E_F_Noc'] . "' , total='$total'  WHERE id = '" . $row['uid'] . "'";
 					$conn->query($sql);
+                    $nombre = $row['firstname'] . ' ' . $row['lastname'];   
+                    echo '<script type="text/javascript">
+                    alert("Salida N-2 de '.$nombre.' ");
+                    window.location.href="index.php"
+                    </script>';
 				} else {
-					$output['error'] = true;
-					$output['message'] = $conn->error;
+					echo true;
+					echo "error 631";
 				}
 			}
 		}
 	} else {
-		$output['error'] = true;
-		$output['message'] = 'ID de empleado no encontrado';
+		echo true;
+		echo 'ID de empleado no encontrado';
 	}
 }
-
-echo json_encode($output);
+echo '<script type="text/javascript">
+                    alert("No puedes registrar mas entradas");
+                    window.location.href="index.php"
+                    </script>';

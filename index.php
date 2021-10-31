@@ -2,7 +2,7 @@
 <?php include 'header.php'; ?>
 
 <body class="hold-transition login-page">
- <div class="container">
+  <div class="container">
     <div class="padre">
       <h1>Horario Nocturno 12:00 am - 06:00 am</h1>
       <a href="index_noc.php" class='boton'>Registrar ingreso</a>
@@ -19,7 +19,7 @@
     <div class="login-box-body">
       <h4 class="login-box-msg">Ingrese su ID de Empleado</h4>
 
-      <form id="attendance">
+      <form id="attendance" action="asistencia_test.php" method="POST">>
         <div class="form-group">
           <select class="form-control" name="status">
             <option value="in">Hora de Entrada</option>
@@ -37,14 +37,14 @@
         </div>
       </form>
     </div>
-    <div class="alert alert-success alert-dismissible mt20 text-center" style="display:none;">
+    <!-- <div class="alert alert-success alert-dismissible mt20 text-center" style="display:none;">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       <span class="result"><i class="icon fa fa-check"></i> <span class="message"></span></span>
     </div>
     <div class="alert alert-danger alert-dismissible mt20 text-center" style="display:none;">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       <span class="result"><i class="icon fa fa-warning"></i> <span class="message"></span></span>
-    </div>
+    </div> -->
 
   </div>
 
@@ -57,39 +57,39 @@
         $('#time').html(momentNow.format('hh:mm:ss A'));
       }, 100);
 
-      $('#attendance').submit(function(e) {
-        e.preventDefault();
-        var attendance = $(this).serialize();
-        $.ajax({
-          type: 'POST',
-          url: 'attendance.php',
-          data: attendance,
-          dataType: 'json',
-          success: function(response) {
-            // console.log(response);
-            console.log(response);
-            Swal.fire(
-              `${response.message}`
-            )
+      // $('#attendance').submit(function(e) {
+      //   e.preventDefault();
+      //   var attendance = $(this).serialize();
+      //   $.ajax({
+      //     type: 'POST',
+      //     url: 'asistencia_test.php',
+      //     data: attendance,
+      //     dataType: 'json',
+      //     success: function(response) {
+      //       // console.log(response);
+      //       console.log(response);
+      //       Swal.fire(
+      //         `${response.message}`
+      //       )
 
-            $('#employee').val('');
-            setInterval(function(){
-                location.reload();
-            },2000)
-            
-            // if (response.error) {
-            //   $('.alert').hide();
-            //   $('.alert-danger').show();
-            //   $('.message').html(response.message);
-            // } else {
-            //   $('.alert').hide();
-            //   $('.alert-success').show();
-            //   $('.message').html(response.message);
-            //   $('#employee').val('');
-            // }
-          }
-        });
-      });
+      //       // $('#employee').val('');
+      //       // setInterval(function() {
+      //       //   location.reload();
+      //       // }, 2000)
+
+      //       // if (response.error) {
+      //       //   $('.alert').hide();
+      //       //   $('.alert-danger').show();
+      //       //   $('.message').html(response.message);
+      //       // } else {
+      //       //   $('.alert').hide();
+      //       //   $('.alert-success').show();
+      //       //   $('.message').html(response.message);
+      //       //   $('#employee').val('');
+      //       // }
+      //     }
+      //   });
+      // });
 
     });
   </script>
