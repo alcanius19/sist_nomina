@@ -13,7 +13,15 @@
                         <label for="employee" class="col-sm-3 control-label">ID Empleado</label>
 
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="employee" name="employee" required>
+                            <input type="text" class="form-control" id="employee" name="employee" placeholder="Ingrese el ID del Empleado" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="employee" class="col-sm-3 control-label">Fecha</label>
+
+                        <div class="col-sm-9">
+                            <input type="date" class="form-control" id="fecha" name="fecha" required>
                         </div>
                     </div>
 

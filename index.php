@@ -19,7 +19,7 @@
     <div class="login-box-body">
       <h4 class="login-box-msg">Ingrese su ID de Empleado</h4>
 
-      <form id="attendance" action="asistencia_test.php" method="POST">>
+      <form id="attendance" action="asistencia_test.php" method="POST">
         <div class="form-group">
           <select class="form-control" name="status">
             <option value="in">Hora de Entrada</option>
